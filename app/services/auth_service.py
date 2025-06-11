@@ -2,11 +2,20 @@ from app.schemas.user_schema import UserCreate, UserLogin
 from app.repositories.user_repository import create_user, get_user_by_username, get_user_by_email
 from fastapi import HTTPException
 
+def calculate_imc(height: float, weight: float) -> float | None:
+    if not height or not weight:
+        return None
+    try:
+        return round(weight / ((height / 100) ** 2), 2)
+    except ZeroDivisionError:
+        return None
+
 def register_user(user_data: UserCreate):
     existing_user = get_user_by_username(user_data.username)
     if existing_user:
         raise HTTPException(status_code=400, detail="Username already exists")
-    return create_user(user_data)
+    imc = calculate_imc(user_data.height, user_data.weight)
+    return create_user(user_data, imc)
 
 def login_user(user_data: UserLogin):
     user = get_user_by_email(user_data.email)
