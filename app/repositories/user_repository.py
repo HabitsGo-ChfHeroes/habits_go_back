@@ -3,9 +3,17 @@ from app.db.session import get_session
 from app.models.user import User
 from app.schemas.user_schema import UserCreate
 
-def create_user(user_data: UserCreate):
+def create_user(user_data: UserCreate, imc: float | None):
     db: Session = next(get_session())
-    new_user = User(email=user_data.email, username=user_data.username, password=user_data.password)
+    new_user = User(
+        email=user_data.email,
+        username=user_data.username,
+        password=user_data.password,
+        height=user_data.height,
+        weight=user_data.weight,
+        goal=user_data.goal,
+        imc=imc
+    )
     db.add(new_user)
     db.commit()
     db.refresh(new_user)

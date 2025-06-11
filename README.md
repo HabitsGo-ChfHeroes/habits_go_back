@@ -88,6 +88,12 @@ Este comando inicia el servidor con recarga automática y habilita la documentac
 uvicorn app.main:app --reload
 ```
 
+### O alternativamente para exponer IP con `fastapi`:
+
+```bash
+fastapi dev app/main.py --reload --host 0.0.0.0 --port 8000
+```     
+
 ---
 
 ## 📌 6. Actualizar `requirements.txt` si se agregan dependencias
