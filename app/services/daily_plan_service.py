@@ -35,16 +35,16 @@ def parse_response(text: str, meal_type: str) -> Meal:
         )
 
 def generate_recipe_with_ollama(meal_type: str, goal: str) -> Meal:
-    prompt = f"""Eres un nutricionista. Dame una receta para {meal_type} para alguien cuyo objetivo es '{goal}'.Genera todo el contenido exclusivamente en español. No utilices palabras ni frases en inglés.
-Devuélvela con:
-**Nombre del plato:** Nombre del platillo solamente
-**Ingredientes:**
-- Lista de ingredientes
+    prompt = f"""Eres un nutricionista profesional. Responde exclusivamente en español. No incluyas introducciones, saludos, ni frases explicativas.
 
-**Preparación:**
-Pasos de la preparación
-
-**Video:** [Link al video](https://...)"""
+        Debes generar una receta para {meal_type} que ayude a una persona cuyo objetivo es '{goal}'.
+        Responde usando estrictamente este formato:
+        **Nombre del plato:** (solo el nombre del platillo, sin frases adicionales)
+        **Ingredientes:**
+        - Lista de ingredientes (uno por línea, usando viñetas)
+        **Preparación:**
+        Pasos detallados de la preparación
+        **Video:** [Link al video](https://...) (puede ser ficticio si no existe)"""
 
     try:
         response = requests.post("http://localhost:11434/api/generate", json={
