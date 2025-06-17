@@ -11,3 +11,4 @@ class Food(Base):
     video_url = Column(String(150), nullable=True)
 
     food_ingredients = relationship("FoodIngredient", back_populates="food", lazy="selectin")
+    plan_foods = relationship("PlanFood", back_populates="food", lazy="selectin")

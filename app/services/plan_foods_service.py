@@ -1,4 +1,4 @@
-from app.schemas.plan_foods_schema import PlanFoodsRequest, PlanFoodsResponse
+from app.schemas.plan_food_schema import PlanFoodsRequest, PlanFoodsResponse
 from app.services.openai_service import generate_recipe
 
 def generate_daily_plan(request: PlanFoodsRequest) -> PlanFoodsResponse:

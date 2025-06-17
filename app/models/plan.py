@@ -10,5 +10,6 @@ class Plan(Base):
     date = Column(Date, nullable=False)
 
     user = relationship("User", back_populates="plans")
+    plan_foods = relationship("PlanFood", back_populates="plan", lazy="selectin")
 
     __table_args__ = (UniqueConstraint('user_id', 'date', name='_user_date_uc'),)
