@@ -1,29 +1,13 @@
 from pydantic import BaseModel
-from typing import List, Optional
+from app.enums.status import Status
 
-class PlanFoodsRequest(BaseModel):
+class DailyPlanRequest(BaseModel):
     goal: str
+    user_id: int
 
-class Ingredient(BaseModel):
-    name: str
-    quantity: Optional[float] = None
-    unit: str
+class DailyPlanResponse(BaseModel):
+    message: str
 
-class FoodDetails(BaseModel):
-    name: str
-    meal_type: str
-    time: str
-    preparation: str
-    video_url: str
-
-class Meal(BaseModel):
-    food: FoodDetails
-    ingredients: List[Ingredient]
-
-class PlanFoodsResponse(BaseModel):
-    meals: List[Meal]
-
-"""
 class PlanFoodCreate(BaseModel):
     plan_id: int
     meal_id: int
@@ -40,4 +24,3 @@ class PlanFoodResponse(BaseModel):
     model_config = {
         "from_attributes": True
     }
-"""

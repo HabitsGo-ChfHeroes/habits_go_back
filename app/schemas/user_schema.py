@@ -3,7 +3,8 @@ from app.enums.goal import GoalEnum
 
 class UserCreate(BaseModel):
     email: str
-    username: str
+    first_name: str
+    last_name: str
     password: str
     height: float
     weight: float
@@ -15,7 +16,8 @@ class UserLogin(BaseModel):
 
 class UserOut(BaseModel):
     id: int
-    username: str
+    first_name: str
+    last_name: str
 
     model_config = {
         "from_attributes": True

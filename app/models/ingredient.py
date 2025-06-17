@@ -10,4 +10,4 @@ class Ingredient(Base):
     quantity = Column(Numeric(5, 2), nullable=False)
     unit = Column(String(100), nullable=True)
 
-    food_ingredients = relationship("FoodIngredient", back_populates="food", lazy="selectin")
+    food_ingredients = relationship("FoodIngredient", back_populates="ingredient", lazy="selectin")

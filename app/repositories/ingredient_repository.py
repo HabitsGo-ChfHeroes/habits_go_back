@@ -1,10 +1,8 @@
 from sqlalchemy.orm import Session
-from app.db.session import get_session
 from app.models.ingredient import Ingredient
 from app.schemas.ingredient_schema import IngredientCreate, IngredientResponse
 
-def create_ingredient(ingredient_data: IngredientCreate) -> IngredientResponse:
-    db: Session = next(get_session())
+def create_ingredient(db: Session, ingredient_data: IngredientCreate) -> IngredientResponse:
     new_ingredient = Ingredient(
         name = ingredient_data.name,
         quantity = ingredient_data.quantity,

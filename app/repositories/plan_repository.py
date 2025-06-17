@@ -1,10 +1,8 @@
 from sqlalchemy.orm import Session
-from app.db.session import get_session
 from app.models.plan import Plan
 from app.schemas.plan_schema import PlanCreate, PlanResponse
 
-def create_plan(plan_data: PlanCreate) -> PlanResponse:
-    db: Session = next(get_session())
+def create_plan(db: Session, plan_data: PlanCreate) -> PlanResponse:
     new_plan = Plan(
         user_id = plan_data.user_id,
         date = plan_data.date

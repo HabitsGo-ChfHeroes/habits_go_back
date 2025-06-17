@@ -1,10 +1,8 @@
 from sqlalchemy.orm import Session
-from app.db.session import get_session
 from app.models.food import Food
 from app.schemas.food_schema import FoodCreate, FoodResponse
 
-def create_food(food_data: FoodCreate) -> FoodResponse:
-    db: Session = next(get_session())
+def create_food(db: Session, food_data: FoodCreate) -> FoodResponse:
     new_food = Food(
         name = food_data.name,
         preparation = food_data.preparation,
