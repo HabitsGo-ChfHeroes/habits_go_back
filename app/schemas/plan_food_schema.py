@@ -2,7 +2,6 @@ from pydantic import BaseModel
 from app.enums.status import Status
 
 class DailyPlanRequest(BaseModel):
-    goal: str
     user_id: int
 
 class DailyPlanResponse(BaseModel):

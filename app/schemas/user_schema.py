@@ -22,3 +22,20 @@ class UserOut(BaseModel):
     model_config = {
         "from_attributes": True
     }
+
+class UserRequest(BaseModel):
+    id: int
+
+class UserResponse(BaseModel):
+    id: int
+    email: str
+    first_name: str
+    last_name: str
+    height: float
+    weight: float
+    goal: GoalEnum
+    imc: float | None
+
+    model_config = {
+        "from_attributes": True
+    }
