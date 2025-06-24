@@ -1,7 +1,6 @@
 from sqlalchemy.orm import Session
 from datetime import date, time
-from app.models.ingredient import Ingredient
-from app.schemas.plan_food_schema import DailyPlanRequest, DailyPlanResponseMessage, PlanFoodCreate
+from app.schemas.plan_food_schema import DailyPlanRequest, DailyPlanResponseMessage, PlanFoodCreate, PlanFoodResponse
 from app.schemas.food_schema import FoodCreate
 from app.schemas.ingredient_schema import IngredientCreate
 from app.schemas.meal_schema import MealCreate
@@ -14,7 +13,7 @@ from app.services.ingredient_service import create_ingredient_entry_uncommitted
 from app.services.meal_service import create_meal_entry_uncommitted
 from app.services.plan_service import create_plan_entry_uncommitted
 from app.services.food_ingredient_service import create_food_ingredient_entry_uncommitted
-from app.repositories.plan_food_repository import create_plan_food_uncommitted
+from app.repositories.plan_food_repository import create_plan_food_uncommitted, get_plan_food_by_id, update_status
 from app.enums.meal_type import MealTypeEnum
 from app.enums.status import Status
 
@@ -64,3 +63,11 @@ def generate_daily_plan(db: Session, request: DailyPlanRequest) -> DailyPlanResp
     db.commit()
 
     return DailyPlanResponseMessage(message="Plan diario generado exitosamente")
+
+def update_plan_food_status_by_id(db: Session, plan_food_id: int) -> PlanFoodResponse:
+    plan = get_plan_food_by_id(db, plan_food_id)
+    if plan:
+        plan.status = Status.NOT_COMPLETED if plan.status == Status.COMPLETED else Status.COMPLETED
+        updated = update_status(db, plan)
+        return PlanFoodResponse.model_validate(updated)
+    return PlanFoodResponse.model_validate(updated)

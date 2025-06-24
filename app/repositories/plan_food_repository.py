@@ -23,3 +23,11 @@ def create_plan_food_uncommitted(db: Session, data: PlanFoodCreate):
     )
     db.add(new_plan_food)
     return new_plan_food
+
+def get_plan_food_by_id(db: Session, plan_food_id: int) -> PlanFood:
+    return db.query(PlanFood).filter(PlanFood.id == plan_food_id).first()
+
+def update_status(db: Session, plan_food: PlanFood) -> PlanFood:
+    db.commit()
+    db.refresh(plan_food)
+    return plan_food
