@@ -13,5 +13,5 @@ app = FastAPI()
 configure_cors(app)
 
 app.include_router(auth_router, prefix="/api/auth", tags=["auth"])
-app.include_router(plan_food_router, prefix="/api", tags=["plan_food"])
-app.include_router(plan_router, prefix="/api", tags=["plan"])
+app.include_router(plan_food_router, prefix="/api/plan/food", tags=["plan_food"])
+app.include_router(plan_router, prefix="/api/plan", tags=["plan"])
