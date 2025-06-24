@@ -1,9 +1,7 @@
 from sqlalchemy.orm import Session
 from datetime import date, time
-from app.models.food import Food
 from app.models.ingredient import Ingredient
-from app.models.meal import Meal
-from app.schemas.plan_food_schema import DailyPlanRequest, DailyPlanResponse, PlanFoodCreate
+from app.schemas.plan_food_schema import DailyPlanRequest, DailyPlanResponseMessage, PlanFoodCreate
 from app.schemas.food_schema import FoodCreate
 from app.schemas.ingredient_schema import IngredientCreate
 from app.schemas.meal_schema import MealCreate
@@ -20,7 +18,7 @@ from app.repositories.plan_food_repository import create_plan_food
 from app.enums.meal_type import MealTypeEnum
 from app.enums.status import Status
 
-def generate_daily_plan(db: Session, request: DailyPlanRequest) -> DailyPlanResponse:
+def generate_daily_plan(db: Session, request: DailyPlanRequest) -> DailyPlanResponseMessage:
     today = date.today()
 
     user_details = get_user_details_by_id(db, request.user_id)
@@ -65,4 +63,4 @@ def generate_daily_plan(db: Session, request: DailyPlanRequest) -> DailyPlanResp
             status=Status.NOT_COMPLETED
         ))
 
-    return DailyPlanResponse(message = "Plan diario generado exitosamente")
+    return DailyPlanResponseMessage(message = "Plan diario generado exitosamente")

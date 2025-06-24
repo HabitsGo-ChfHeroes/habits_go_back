@@ -3,4 +3,5 @@ from app.schemas.food_ingredient_schema import FoodIngredientCreate, FoodIngredi
 from app.repositories.food_ingredient_repository import create_food_ingredient
 
 def create_food_ingredient_entry(db: Session, data: FoodIngredientCreate) -> FoodIngredientResponse:
-    return create_food_ingredient(db, data)
+    food_ingredient = create_food_ingredient(db, data)
+    return FoodIngredientResponse.model_validate(food_ingredient)

@@ -1,10 +1,12 @@
 from pydantic import BaseModel
+from datetime import time
+from typing import List
 from app.enums.status import Status
 
 class DailyPlanRequest(BaseModel):
     user_id: int
 
-class DailyPlanResponse(BaseModel):
+class DailyPlanResponseMessage(BaseModel):
     message: str
 
 class PlanFoodCreate(BaseModel):
