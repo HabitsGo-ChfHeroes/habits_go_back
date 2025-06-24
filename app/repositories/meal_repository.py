@@ -11,3 +11,12 @@ def create_meal(db: Session, meal_data: MealCreate) -> Meal:
     db.commit()
     db.refresh(new_meal)
     return new_meal
+
+def create_meal_uncommitted(db: Session, data: MealCreate) -> Meal:
+    new_meal = Meal(
+        name=data.name,
+        hour=data.hour
+    )
+    db.add(new_meal)
+    db.flush()
+    return new_meal

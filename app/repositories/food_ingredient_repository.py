@@ -12,3 +12,11 @@ def create_food_ingredient(db: Session, food_ingredient_data: FoodIngredientCrea
     db.refresh(new_food_ingredient)
 
     return new_food_ingredient
+
+def create_food_ingredient_uncommitted(db: Session, data: FoodIngredientCreate):
+    new_food_ingredient = FoodIngredient(
+        food_id=data.food_id,
+        ingredient_id=data.ingredient_id
+    )
+    db.add(new_food_ingredient)
+    return new_food_ingredient

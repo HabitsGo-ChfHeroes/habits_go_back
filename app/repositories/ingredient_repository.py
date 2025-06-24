@@ -12,3 +12,13 @@ def create_ingredient(db: Session, ingredient_data: IngredientCreate) -> Ingredi
     db.commit()
     db.refresh(new_ingredient)
     return new_ingredient
+
+def create_ingredient_uncommitted(db: Session, data: IngredientCreate) -> Ingredient:
+    new_ingredient = Ingredient(
+        name=data.name,
+        quantity=data.quantity,
+        unit=data.unit
+    )
+    db.add(new_ingredient)
+    db.flush()
+    return new_ingredient

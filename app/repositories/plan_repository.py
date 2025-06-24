@@ -18,6 +18,15 @@ def create_plan(db: Session, plan_data: PlanCreate) -> Plan:
     db.refresh(new_plan)
     return new_plan
 
+def create_plan_uncommitted(db: Session, plan_data: PlanCreate) -> Plan:
+    new_plan = Plan(
+        user_id=plan_data.user_id,
+        date=plan_data.date
+    )
+    db.add(new_plan)
+    db.flush()
+    return new_plan
+
 def get_full_plan_by_user_and_date(db: Session, user_id: int, today: date):
     return (
         db.query(Plan)

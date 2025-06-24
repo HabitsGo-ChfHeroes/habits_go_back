@@ -1,11 +1,14 @@
 from sqlalchemy.orm import Session
 from datetime import date
 from app.schemas.plan_schema import PlanCreate, PlanResponse, PlanDetailResponse, PlanMealIngredient, PlanMeal, PlanMealFood
-from app.repositories.plan_repository import create_plan, get_full_plan_by_user_and_date
+from app.repositories.plan_repository import create_plan, create_plan_uncommitted, get_full_plan_by_user_and_date
 
 def create_plan_entry(db: Session, data: PlanCreate) -> PlanResponse:
     plan = create_plan(db, data)
     return PlanResponse.model_validate(plan)
+
+def create_plan_entry_uncommitted(db: Session, data: PlanCreate):
+    return create_plan_uncommitted(db, data)
 
 def get_daily_plan(db: Session, user_id: int) -> PlanDetailResponse:
     plan = get_full_plan_by_user_and_date(db, user_id, date.today())
