@@ -35,7 +35,7 @@ class UserResponse(BaseModel):
     height: float
     weight: float
     goal: GoalEnum
-    imc: float | None
+    imc: float
 
     model_config = {
         "from_attributes": True
