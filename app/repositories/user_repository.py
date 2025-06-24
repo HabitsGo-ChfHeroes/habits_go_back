@@ -87,3 +87,16 @@ def get_meals_completion_counts(db: Session, user_id: int) -> tuple[int, int]:
     )
 
     return total_comidas_cumplidas, total_comidas_registradas
+
+def get_weekly_completed_per_day(db: Session, user_id: int, start_date: date, end_date: date) -> dict:
+    results = db.query(
+        Plan.date,
+        func.count(PlanFood.id)
+    ).join(PlanFood).filter(
+        Plan.user_id == user_id,
+        Plan.date >= start_date,
+        Plan.date <= end_date,
+        PlanFood.status == "Completado"
+    ).group_by(Plan.date).order_by(Plan.date).all()
+
+    return {row[0]: row[1] for row in results}
