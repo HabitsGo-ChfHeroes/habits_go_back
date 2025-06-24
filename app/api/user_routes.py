@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from app.db.session import get_session
 from fastapi import APIRouter, HTTPException
 from app.schemas.user_schema import UserResponse
-from app.services.user_service import get_user_details_by_id
+from app.services.user_service import get_user_details_by_id, get_weekly_completion
 
 router = APIRouter()
 
@@ -13,3 +13,7 @@ def get_user(user_id: int, db: Session = Depends(get_session)):
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     return user
+
+@router.get("/weekly/completion/{user_id}", response_model=int)
+def get_weekly_completion_endpoint(user_id: int, db: Session = Depends(get_session)):
+    return get_weekly_completion(user_id, db)
