@@ -43,3 +43,30 @@ def get_weekly_completion_percentage(db: Session, user_id: int, start_date, end_
     ).one()
 
     return result.completed or 0, result.total or 0
+
+def get_most_productive_days(db: Session, user_id: int, start_date: date, end_date: date) -> List[int]:
+    subquery = (
+        db.query(
+            func.dayofweek(Plan.date).label("weekday"),
+            func.count(PlanFood.id).label("completed_count")
+        )
+        .join(PlanFood, Plan.id == PlanFood.plan_id)
+        .filter(
+            Plan.user_id == user_id,
+            Plan.date >= start_date,
+            Plan.date <= end_date,
+            PlanFood.status == "Completado"
+        )
+        .group_by("weekday")
+        .subquery()
+    )
+
+    max_count_subquery = db.query(func.max(subquery.c.completed_count)).scalar_subquery()
+
+    result = (
+        db.query(subquery.c.weekday)
+        .filter(subquery.c.completed_count == max_count_subquery)
+        .all()
+    )
+
+    return [int(row[0]) for row in result]
