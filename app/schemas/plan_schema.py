@@ -35,5 +35,6 @@ class PlanMeal(BaseModel):
     status: Status
 
 class PlanDetailResponse(BaseModel):
+    id: int
     date: date
     meals: List[PlanMeal]

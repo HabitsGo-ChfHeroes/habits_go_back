@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from datetime import time
+from datetime import date, time
 from app.utils.time_utils import get_today_lima
 from app.schemas.plan_food_schema import DailyPlanRequest, DailyPlanResponseMessage, PlanFoodCreate, PlanFoodResponse
 from app.schemas.food_schema import FoodCreate
@@ -14,7 +14,7 @@ from app.services.ingredient_service import create_ingredient_entry_uncommitted
 from app.services.meal_service import create_meal_entry_uncommitted
 from app.services.plan_service import create_plan_entry_uncommitted
 from app.services.food_ingredient_service import create_food_ingredient_entry_uncommitted
-from app.repositories.plan_food_repository import create_plan_food_uncommitted, get_plan_food_by_id, update_status
+from app.repositories.plan_food_repository import create_plan_food_uncommitted, get_plan_food_by_id, update_status, get_quantity_plan_food_completed_by_plan_id
 from app.enums.meal_type import MealTypeEnum
 from app.enums.status import Status
 
@@ -72,3 +72,6 @@ def update_plan_food_status_by_id(db: Session, plan_food_id: int) -> PlanFoodRes
         updated = update_status(db, plan)
         return PlanFoodResponse.model_validate(updated)
     return PlanFoodResponse.model_validate(updated)
+
+def get_quantity_plan_food_completed(db: Session, plan_id: int) -> int:
+    return get_quantity_plan_food_completed_by_plan_id(db, plan_id)

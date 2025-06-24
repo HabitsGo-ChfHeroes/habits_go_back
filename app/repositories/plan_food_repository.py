@@ -31,3 +31,10 @@ def update_status(db: Session, plan_food: PlanFood) -> PlanFood:
     db.commit()
     db.refresh(plan_food)
     return plan_food
+
+def get_quantity_plan_food_completed_by_plan_id(db: Session, plan_id: int) -> int:
+    return (
+        db.query(PlanFood)
+        .filter(PlanFood.plan_id == plan_id, PlanFood.status == "COMPLETED")
+        .count()
+    )

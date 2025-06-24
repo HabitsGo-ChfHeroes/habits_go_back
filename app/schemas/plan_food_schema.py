@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from datetime import time
+from datetime import date, time
 from typing import List
 from app.enums.status import Status
 

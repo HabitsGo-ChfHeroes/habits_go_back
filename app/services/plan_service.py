@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Session
+from datetime import date
 from fastapi import HTTPException
 from app.utils.time_utils import get_today_lima
 from app.schemas.plan_schema import PlanCreate, PlanResponse, PlanDetailResponse, PlanMealIngredient, PlanMeal, PlanMealFood
@@ -46,6 +47,7 @@ def get_daily_plan(db: Session, user_id: int) -> PlanDetailResponse:
         ))
 
     return PlanDetailResponse(
+        id=plan.id,
         date=plan.date,
         meals=meals
     )
