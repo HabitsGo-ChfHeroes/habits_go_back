@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
-from datetime import date, time
+from datetime import time
+from app.utils.time_utils import get_today_lima
 from app.schemas.plan_food_schema import DailyPlanRequest, DailyPlanResponseMessage, PlanFoodCreate, PlanFoodResponse
 from app.schemas.food_schema import FoodCreate
 from app.schemas.ingredient_schema import IngredientCreate
@@ -18,7 +19,7 @@ from app.enums.meal_type import MealTypeEnum
 from app.enums.status import Status
 
 def generate_daily_plan(db: Session, request: DailyPlanRequest) -> DailyPlanResponseMessage:
-    today = date.today()
+    today = get_today_lima()
 
     user_details = get_user_details_by_id(db, request.user_id)
 

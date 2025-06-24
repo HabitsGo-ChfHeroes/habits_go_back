@@ -18,6 +18,7 @@ class UserOut(BaseModel):
     id: int
     first_name: str
     last_name: str
+    goal: GoalEnum
 
     model_config = {
         "from_attributes": True

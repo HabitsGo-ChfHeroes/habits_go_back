@@ -11,6 +11,6 @@ router = APIRouter()
 def create_daily_plan(request: DailyPlanRequest, db: Session = Depends(get_session)):
     return generate_daily_plan(db, request)
 
-@router.put("/plan/food/{plan_food_id}/status", response_model=PlanFoodResponse)
+@router.put("/{plan_food_id}/status", response_model=PlanFoodResponse)
 def update_plan_food_status(plan_food_id: int, db: Session = Depends(get_session)):
     return update_plan_food_status_by_id(db, plan_food_id)

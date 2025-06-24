@@ -27,6 +27,14 @@ def create_plan_uncommitted(db: Session, plan_data: PlanCreate) -> Plan:
     db.flush()
     return new_plan
 
+def exists_plan_by_user_and_date(db: Session, user_id: int, target_date: date) -> bool:
+    return (
+        db.query(Plan)
+        .filter(Plan.user_id == user_id, Plan.date == target_date)
+        .first()
+        is not None
+    )
+
 def get_full_plan_by_user_and_date(db: Session, user_id: int, today: date):
     return (
         db.query(Plan)
