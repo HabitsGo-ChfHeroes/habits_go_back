@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from datetime import date, timedelta
 from app.schemas.user_schema import UserResponse
-from app.repositories.user_repository import get_user_by_id, get_weekly_completion_percentage, get_most_productive_days
+from app.repositories.user_repository import get_user_by_id, get_weekly_completion_percentage, get_most_productive_days, get_meals_completion_counts
 from fastapi import HTTPException
 
 def get_user_details_by_id(db: Session, user_id: int) -> UserResponse:
@@ -48,3 +48,7 @@ def get_most_productive_day(db: Session, user_id: int) -> str:
         return full_names[day_abbrs[0]]
     else:
         return ", ".join(day_abbrs)
+    
+def get_meals_completion_summary_string(db: Session, user_id: int) -> str:
+    completed, total = get_meals_completion_counts(db, user_id)
+    return f"{completed} / {total}"

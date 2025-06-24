@@ -70,3 +70,20 @@ def get_most_productive_days(db: Session, user_id: int, start_date: date, end_da
     )
 
     return [int(row[0]) for row in result]
+
+def get_meals_completion_counts(db: Session, user_id: int) -> tuple[int, int]:
+    total_comidas_cumplidas = (
+        db.query(PlanFood)
+        .join(Plan)
+        .filter(Plan.user_id == user_id, PlanFood.status == "Completado")
+        .count()
+    )
+
+    total_comidas_registradas = (
+        db.query(PlanFood)
+        .join(Plan)
+        .filter(Plan.user_id == user_id)
+        .count()
+    )
+
+    return total_comidas_cumplidas, total_comidas_registradas

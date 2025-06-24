@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from app.db.session import get_session
 from fastapi import APIRouter, HTTPException
 from app.schemas.user_schema import UserResponse
-from app.services.user_service import get_user_details_by_id, get_weekly_completion, get_most_productive_day
+from app.services.user_service import get_user_details_by_id, get_weekly_completion, get_most_productive_day, get_meals_completion_summary_string
 
 router = APIRouter()
 
@@ -21,3 +21,7 @@ def get_weekly_completion_endpoint(user_id: int, db: Session = Depends(get_sessi
 @router.get("/user/productive/day/{user_id}", response_model=str)
 def get_most_productive_day_endpoint(user_id: int, db: Session = Depends(get_session)):
     return get_most_productive_day(db, user_id)
+
+@router.get("/user/{user_id}/meal/completion/summary", response_model=str)
+def get_meals_completion_summary(user_id: int, db: Session = Depends(get_session)):
+    return get_meals_completion_summary_string(db, user_id)
