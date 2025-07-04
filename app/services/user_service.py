@@ -1,9 +1,17 @@
 from sqlalchemy.orm import Session
 from datetime import date, timedelta
 from typing import List
-from app.schemas.user_schema import UserResponse
-from app.repositories.user_repository import get_user_by_id, get_weekly_completion_percentage, get_most_productive_days, get_meals_completion_counts, get_weekly_completed_per_day
+from app.schemas.user_schema import UserResponse, UserUpdate
+from app.repositories.user_repository import get_user_by_id, get_weekly_completion_percentage, get_most_productive_days, get_meals_completion_counts, get_weekly_completed_per_day, save_user
 from fastapi import HTTPException
+
+def calculate_imc(height: float, weight: float) -> float | None:
+    if not height or not weight:
+        return None
+    try:
+        return round(weight / ((height / 100) ** 2), 2)
+    except ZeroDivisionError:
+        return None
 
 def get_user_details_by_id(db: Session, user_id: int) -> UserResponse:
     user = get_user_by_id(db, user_id)
@@ -65,3 +73,17 @@ def get_weekly_evolution_data(db: Session, user_id: int) -> List[int]:
         result_map.get(monday + timedelta(days=i), 0)
         for i in range(7)
     ]
+
+def update_user_profile(db: Session, user_id: int, update_data: UserUpdate) -> UserResponse:
+    user = get_user_by_id(db, user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    user.height = update_data.height
+    user.weight = update_data.weight
+    user.goal = update_data.goal
+    user.imc = calculate_imc(update_data.height, update_data.weight)
+
+    updated_user = save_user(db, user)
+
+    return UserResponse.model_validate(updated_user)

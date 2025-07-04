@@ -100,3 +100,10 @@ def get_weekly_completed_per_day(db: Session, user_id: int, start_date: date, en
     ).group_by(Plan.date).order_by(Plan.date).all()
 
     return {row[0]: row[1] for row in results}
+
+
+def save_user(db: Session, user: User) -> User:
+    db.add(user)
+    db.commit()
+    db.refresh(user)
+    return user
