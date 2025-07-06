@@ -11,3 +11,4 @@ class Ingredient(Base):
     unit = Column(String(100), nullable=True)
 
     food_ingredients = relationship("FoodIngredient", back_populates="ingredient", lazy="selectin")
+    user_ingredients = relationship("UserIngredient", back_populates="ingredient", lazy="selectin")

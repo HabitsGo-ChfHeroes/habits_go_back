@@ -22,3 +22,7 @@ def create_ingredient_uncommitted(db: Session, data: IngredientCreate) -> Ingred
     db.add(new_ingredient)
     db.flush()
     return new_ingredient
+
+def get_all_ingredients_id_and_name(db: Session) -> list[dict]:
+    result = db.query(Ingredient.id, Ingredient.name).all()
+    return [{"id": row.id, "name": row.name} for row in result]

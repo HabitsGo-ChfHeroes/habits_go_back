@@ -17,3 +17,4 @@ class User(Base):
     goal = Column(Enum(GoalEnum), nullable=False)
 
     plans = relationship("Plan", back_populates="user", lazy="selectin")
+    user_ingredients = relationship("UserIngredient", back_populates="user", lazy="selectin")
