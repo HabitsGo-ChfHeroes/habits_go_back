@@ -62,7 +62,8 @@ def generate_recipe(meal_type: str, goal_type: str, preferred_ingredients: list[
         """
 
     if has_ingredients:
-        base_prompt += f"\nDebes incluir al menos uno de los siguientes ingredientes: {preferred_ingredients_str}.\n"
+        base_prompt += f"""\nLa receta debe ser acorde al {meal_type}, trata de recomendar recetas innovadoras y debes incluir 
+        al menos uno (basta con solo uno puedes escoger aleatoriamente) de los siguientes ingredientes: {preferred_ingredients_str}.\n"""
 
     base_prompt += """
         Responde usando estrictamente este formato:
