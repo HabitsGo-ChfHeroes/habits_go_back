@@ -30,6 +30,15 @@ def get_ingredients_by_user_id(db: Session, user_id: int) -> list[Ingredient]:
         .all()
     )
     
+def get_user_ingredient_names(db: Session, user_id: int) -> list[str]:
+    return [
+        ing.name
+        for ing in db.query(Ingredient)
+        .join(UserIngredient, Ingredient.id == UserIngredient.ingredient_id)
+        .filter(UserIngredient.user_id == user_id)
+        .all()
+    ]
+    
 def delete_user_ingredient(db: Session, user_id: int, ingredient_id: int) -> bool:
     relation = db.query(UserIngredient).filter_by(user_id=user_id, ingredient_id=ingredient_id).first()
     if relation:

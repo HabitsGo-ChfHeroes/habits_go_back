@@ -52,28 +52,37 @@ def parse_recipe_response(response_text: str) -> dict:
         "ingredients": parsed_ingredients
     }
 
-def generate_recipe(meal_type: str, goal_type: str) -> dict:
-    prompt = f"""Eres un nutricionista profesional. Responde exclusivamente en español. No incluyas introducciones, saludos, ni frases explicativas.
+def generate_recipe(meal_type: str, goal_type: str, preferred_ingredients: list[str]) -> dict:
+    has_ingredients = bool(preferred_ingredients)
+    preferred_ingredients_str = ", ".join(preferred_ingredients)
 
-            Debes generar una receta para {meal_type} que ayude a una persona cuyo objetivo es {goal_type}.
-            Responde usando estrictamente este formato:
-            **Nombre del plato:** (solo el nombre del platillo, sin frases adicionales)
-            **Tipo de comida:** (solo el tipo de comida, por ejemplo: desayuno, almuerzo, cena, etc., segun el que se solicito)
-            **Hora:** (la hora del día para la que es la comida, en foramto de 24 horas, por ejemplo: 08:00, 12:00, 18:00)
-            **Ingredientes:**
-            - Lista de ingredientes (uno por línea, usando viñetas)
-            - Debes usar exactamente este formato: 'cantidad' 'unidad' de 'ingrediente'
-            - Si no hay unidad, usa la palabra "unidad" o "unidades"
-            - Incorrecto: 1 plátano
-            - Correcto: 1 unidad de plátano
-            - Correcto: 200 ml de leche desnatada
-            **Preparación:**
-            Pasos detallados de la preparación"""
-    
+    base_prompt = f"""Eres un nutricionista profesional. Responde exclusivamente en español. No incluyas introducciones, saludos, ni frases explicativas.
+
+        Debes generar una receta para {meal_type} que ayude a una persona cuyo objetivo es {goal_type}.
+        """
+
+    if has_ingredients:
+        base_prompt += f"\nDebes incluir al menos uno de los siguientes ingredientes: {preferred_ingredients_str}.\n"
+
+    base_prompt += """
+        Responde usando estrictamente este formato:
+        **Nombre del plato:** (solo el nombre del platillo, sin frases adicionales)
+        **Tipo de comida:** (solo el tipo de comida, por ejemplo: desayuno, almuerzo, cena, etc., según el que se solicitó)
+        **Hora:** (la hora del día para la que es la comida, en formato 24 horas, por ejemplo: 08:00, 12:00, 18:00)
+        **Ingredientes:**
+        - Lista de ingredientes (uno por línea, usando viñetas)
+        - Debes usar exactamente este formato: 'cantidad' 'unidad' de 'ingrediente'
+        - Si no hay unidad, usa la palabra "unidad" o "unidades"
+        - Incorrecto: 1 plátano
+        - Correcto: 1 unidad de plátano
+        - Correcto: 200 ml de leche desnatada
+        **Preparación:**
+        Pasos detallados de la preparación"""
+
     response = client.responses.create(
-        model = "gpt-4o-mini",
-        input = prompt,
-        temperature = 1.2
+        model="gpt-4o-mini",
+        input=base_prompt,
+        temperature=1.2
     )
 
     return parse_recipe_response(response.output_text)
