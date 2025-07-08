@@ -14,6 +14,7 @@ from app.services.ingredient_service import create_ingredient_entry_uncommitted
 from app.services.meal_service import create_meal_entry_uncommitted
 from app.services.plan_service import create_plan_entry_uncommitted
 from app.services.food_ingredient_service import create_food_ingredient_entry_uncommitted
+from app.services.user_ingredient_service import get_user_ingredient_name_list
 from app.repositories.plan_food_repository import create_plan_food_uncommitted, get_plan_food_by_id, update_status, get_quantity_plan_food_completed_by_plan_id
 from app.enums.meal_type import MealTypeEnum
 from app.enums.status import Status
@@ -22,6 +23,8 @@ def generate_daily_plan(db: Session, request: DailyPlanRequest) -> DailyPlanResp
     today = get_today_lima()
 
     user_details = get_user_details_by_id(db, request.user_id)
+    
+    preferred_ingredients = get_user_ingredient_name_list(db, request.user_id)
 
     plan = create_plan_entry_uncommitted(db, PlanCreate(
         user_id=user_details.id,
@@ -30,7 +33,7 @@ def generate_daily_plan(db: Session, request: DailyPlanRequest) -> DailyPlanResp
     ))
 
     for enum_meal_type in MealTypeEnum:
-        recipe = generate_recipe(enum_meal_type.value, user_details.goal.value)
+        recipe = generate_recipe(enum_meal_type.value, user_details.goal.value, preferred_ingredients)
 
         food = create_food_entry_uncommitted(db, FoodCreate(
             name=recipe["food"]["name"],
