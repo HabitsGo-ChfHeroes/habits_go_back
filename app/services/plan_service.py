@@ -65,3 +65,9 @@ def update_plan_comment(db: Session, plan_id: int, update_data: PlanUpdate) -> P
 
     return PlanResponse.model_validate(updated_plan)
 
+def get_daily_plan_comment(db: Session, plan_id: int) -> str:
+    plan = get_plan_by_id(db, plan_id)
+    if not plan:
+        raise HTTPException(status_code=404, detail="Plan not found")
+    
+    return plan.comment

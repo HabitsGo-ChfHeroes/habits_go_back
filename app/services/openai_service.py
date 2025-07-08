@@ -81,7 +81,7 @@ def generate_recipe(meal_type: str, goal_type: str, preferred_ingredients: list[
         Pasos detallados de la preparación"""
 
     response = client.responses.create(
-        model="gpt-4o-mini",
+        model="gpt-4.1-mini",
         input=base_prompt,
         temperature=1.2
     )
