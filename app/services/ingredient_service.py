@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from app.schemas.ingredient_schema import IngredientCreate, IngredientResponse
-from app.repositories.ingredient_repository import create_ingredient, create_ingredient_uncommitted, get_all_ingredients_id_and_name
+from app.repositories.ingredient_repository import create_ingredient, create_ingredient_uncommitted, get_ingredients_paginated, search_ingredients_by_name
 
 def create_ingredient_entry(db: Session, data: IngredientCreate) -> IngredientResponse:
     ingredient = create_ingredient(db, data)
@@ -9,5 +9,8 @@ def create_ingredient_entry(db: Session, data: IngredientCreate) -> IngredientRe
 def create_ingredient_entry_uncommitted(db: Session, data: IngredientCreate):
     return create_ingredient_uncommitted(db, data)
 
-def fetch_ingredient_id_name_list(db: Session) -> list[dict]:
-    return get_all_ingredients_id_and_name(db)
+def fetch_paginated_ingredients(db: Session, skip: int = 0, limit: int = 50) -> list[dict]:
+    return get_ingredients_paginated(db, skip, limit)
+
+def search_ingredient_id_name_by_term(db: Session, query: str) -> list[dict]:
+    return search_ingredients_by_name(db, query)
