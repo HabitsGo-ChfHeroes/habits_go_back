@@ -11,7 +11,8 @@ from app.schemas.plan_schema import PlanCreate
 def create_plan(db: Session, plan_data: PlanCreate) -> Plan:
     new_plan = Plan(
         user_id=plan_data.user_id,
-        date=plan_data.date
+        date=plan_data.date,
+        comment=plan_data.comment
     )
     db.add(new_plan)
     db.commit()
@@ -21,7 +22,9 @@ def create_plan(db: Session, plan_data: PlanCreate) -> Plan:
 def create_plan_uncommitted(db: Session, plan_data: PlanCreate) -> Plan:
     new_plan = Plan(
         user_id=plan_data.user_id,
-        date=plan_data.date
+        date=plan_data.date,
+        comment=plan_data.comment
+
     )
     db.add(new_plan)
     db.flush()
@@ -49,3 +52,13 @@ def get_full_plan_by_user_and_date(db: Session, user_id: int, today: date):
         )
         .first()
     )
+
+
+def get_plan_by_id(db: Session, plan_id: int) -> Plan | None:
+    return db.query(Plan).filter(Plan.id == plan_id).first()
+
+def save_plan(db: Session, plan: Plan) -> Plan:
+    db.add(plan)
+    db.commit()
+    db.refresh(plan)
+    return plan
