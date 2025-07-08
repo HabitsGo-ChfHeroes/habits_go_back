@@ -40,3 +40,8 @@ class UserResponse(BaseModel):
     model_config = {
         "from_attributes": True
     }
+
+class UserUpdate(BaseModel):
+    height: float
+    weight: float
+    goal: GoalEnum

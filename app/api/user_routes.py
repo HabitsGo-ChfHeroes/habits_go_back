@@ -2,8 +2,8 @@ from fastapi import Depends
 from sqlalchemy.orm import Session
 from app.db.session import get_session
 from fastapi import APIRouter, HTTPException
-from app.schemas.user_schema import UserResponse
-from app.services.user_service import get_user_details_by_id, get_weekly_completion, get_most_productive_day, get_meals_completion_summary_string, get_weekly_evolution_data
+from app.schemas.user_schema import UserResponse, UserUpdate
+from app.services.user_service import get_user_details_by_id, get_weekly_completion, get_most_productive_day, get_meals_completion_summary_string, get_weekly_evolution_data, update_user_profile
 
 router = APIRouter()
 
@@ -29,3 +29,7 @@ def get_meals_completion_summary(user_id: int, db: Session = Depends(get_session
 @router.get("/{user_id}/weekly/evolution", response_model=list[int])
 def get_weekly_evolution_per_day(user_id: int, db: Session = Depends(get_session)):
     return get_weekly_evolution_data(db, user_id)
+
+@router.put("/{user_id}/profile", response_model=UserResponse)
+def update_user(user_id: int, update_data: UserUpdate, db: Session = Depends(get_session)):
+    return update_user_profile(db, user_id, update_data)
