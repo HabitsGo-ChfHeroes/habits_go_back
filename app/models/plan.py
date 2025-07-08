@@ -1,5 +1,6 @@
-from sqlalchemy import Column, Integer, Date, ForeignKey, UniqueConstraint
+from sqlalchemy import Column, Integer, Date, ForeignKey, UniqueConstraint, Text
 from sqlalchemy.orm import relationship
+
 from app.db.base import Base
 
 class Plan(Base):
@@ -8,6 +9,7 @@ class Plan(Base):
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     date = Column(Date, nullable=False)
+    comment = Column(Text, nullable=False)
 
     user = relationship("User", back_populates="plans")
     plan_foods = relationship("PlanFood", back_populates="plan", lazy="selectin")

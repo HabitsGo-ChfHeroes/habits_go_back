@@ -2,8 +2,8 @@ from sqlalchemy.orm import Session
 from datetime import date
 from fastapi import HTTPException
 from app.utils.time_utils import get_today_lima
-from app.schemas.plan_schema import PlanCreate, PlanResponse, PlanDetailResponse, PlanMealIngredient, PlanMeal, PlanMealFood
-from app.repositories.plan_repository import create_plan, create_plan_uncommitted, get_full_plan_by_user_and_date, exists_plan_by_user_and_date
+from app.schemas.plan_schema import PlanCreate, PlanResponse, PlanDetailResponse, PlanMealIngredient, PlanMeal, PlanMealFood, PlanUpdate
+from app.repositories.plan_repository import create_plan, create_plan_uncommitted, get_full_plan_by_user_and_date, exists_plan_by_user_and_date, get_plan_by_id, save_plan
 
 def create_plan_entry(db: Session, data: PlanCreate) -> PlanResponse:
     plan = create_plan(db, data)
@@ -49,5 +49,19 @@ def get_daily_plan(db: Session, user_id: int) -> PlanDetailResponse:
     return PlanDetailResponse(
         id=plan.id,
         date=plan.date,
+        comment=plan.comment,
         meals=meals
     )
+
+
+def update_plan_comment(db: Session, plan_id: int, update_data: PlanUpdate) -> PlanResponse:
+    plan = get_plan_by_id(db, plan_id)
+    if not plan:
+        raise HTTPException(status_code=404, detail="Plan not found")
+
+    plan.comment = update_data.comment
+
+    updated_plan = save_plan(db, plan)
+
+    return PlanResponse.model_validate(updated_plan)
+
