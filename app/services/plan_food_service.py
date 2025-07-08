@@ -25,8 +25,7 @@ def generate_daily_plan(db: Session, request: DailyPlanRequest) -> DailyPlanResp
 
     plan = create_plan_entry_uncommitted(db, PlanCreate(
         user_id=user_details.id,
-        date=today,
-        comment=''
+        date=today
     ))
 
     for enum_meal_type in MealTypeEnum:

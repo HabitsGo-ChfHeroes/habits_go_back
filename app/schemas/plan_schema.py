@@ -6,13 +6,11 @@ from app.enums.status import Status
 class PlanCreate(BaseModel):
     user_id: int
     date: date
-    comment: str
 
 class PlanResponse(BaseModel):
     id: int
     user_id: int
     date: date
-    comment: str
 
     model_config = {
         "from_attributes": True
@@ -39,8 +37,4 @@ class PlanMeal(BaseModel):
 class PlanDetailResponse(BaseModel):
     id: int
     date: date
-    comment: str
     meals: List[PlanMeal]
-
-class PlanUpdate(BaseModel):
-    comment: str
