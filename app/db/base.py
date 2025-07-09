@@ -9,3 +9,5 @@ from app.models import meal
 from app.models import plan_food
 from app.models import plan
 from app.models import user
+from app.models import user_ingredient
+from app.models import payment

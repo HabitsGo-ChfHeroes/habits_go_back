@@ -4,6 +4,7 @@ from app.api.user_routes import router as user_router
 from app.api.plan_food_routes import router as plan_food_router
 from app.api.plan_routes import router as plan_router
 from app.api.ingredient_routes import router as ingredient_router
+from app.api.payment_routes import router as payment_router
 from app.core.cors import configure_cors
 from app.db.session import engine
 from app.db.base import Base
@@ -19,3 +20,4 @@ app.include_router(user_router, prefix="/api/user", tags=["user"])
 app.include_router(plan_food_router, prefix="/api/plan/food", tags=["plan_food"])
 app.include_router(plan_router, prefix="/api/plan", tags=["plan"])
 app.include_router(ingredient_router, prefix="/api/ingredient", tags=["ingredient"])
+app.include_router(payment_router, prefix="/api/payment", tags=["payment"])
