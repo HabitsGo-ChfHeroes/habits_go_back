@@ -11,3 +11,4 @@ from app.models import plan
 from app.models import user
 from app.models import user_ingredient
 from app.models import payment
+from app.models import user_habit
