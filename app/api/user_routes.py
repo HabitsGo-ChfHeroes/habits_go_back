@@ -6,6 +6,7 @@ from fastapi import APIRouter, HTTPException
 from app.schemas.user_schema import UserResponse, UserUpdate
 from app.schemas.ingredient_schema import IngredientResponse
 from app.schemas.user_ingredient_schema import UserIngredientCreate, UserIngredientResponse
+from app.schemas.user_habit_schema import UserHabitCreate, UserHabitResponse
 from app.services.user_service import (
     get_user_details_by_id,
     get_weekly_completion,
@@ -14,6 +15,7 @@ from app.services.user_service import (
     get_weekly_evolution_data,
     update_user_profile,
 )
+from app.services.user_habit_service import submit_user_habits
 from app.services.user_ingredient_service import create_user_ingredient_entry, get_user_ingredients, remove_user_ingredient_entry
 
 router = APIRouter()
@@ -60,6 +62,14 @@ def get_weekly_evolution_per_day(
 @router.put("/{user_id}/profile", response_model=UserResponse)
 def update_user(user_id: int, update_data: UserUpdate, db: Session = Depends(get_session)):
     return update_user_profile(db, user_id, update_data)
+
+@router.post("/{user_id}/habits", response_model=UserHabitResponse)
+def submit_habits(
+    user_id: int,
+    habit_data: UserHabitCreate,
+    db: Session = Depends(get_session),
+):
+    return submit_user_habits(db, user_id, habit_data)
 
 @router.post("/{user_id}/ingredients/{ingredient_id}", response_model=UserIngredientResponse, status_code=status.HTTP_201_CREATED)
 def create_user_ingredient(user_id: int, ingredient_id: int, db: Session = Depends(get_session)):
