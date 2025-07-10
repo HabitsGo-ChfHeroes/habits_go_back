@@ -18,3 +18,4 @@ class User(Base):
 
     plans = relationship("Plan", back_populates="user", lazy="selectin")
     user_ingredients = relationship("UserIngredient", back_populates="user", lazy="selectin")
+    habit = relationship("UserHabit", back_populates="user", uselist=False, lazy="selectin")

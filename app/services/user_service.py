@@ -2,7 +2,14 @@ from sqlalchemy.orm import Session
 from datetime import date, timedelta
 from typing import List
 from app.schemas.user_schema import UserResponse, UserUpdate
-from app.repositories.user_repository import get_user_by_id, get_weekly_completion_percentage, get_most_productive_days, get_meals_completion_counts, get_weekly_completed_per_day, save_user
+from app.repositories.user_repository import (
+    get_user_by_id,
+    get_weekly_completion_percentage,
+    get_most_productive_days,
+    get_meals_completion_counts,
+    get_weekly_completed_per_day,
+    save_user,
+)
 from fastapi import HTTPException
 
 def calculate_imc(height: float, weight: float) -> float | None:
@@ -20,19 +27,23 @@ def get_user_details_by_id(db: Session, user_id: int) -> UserResponse:
     
     return UserResponse.model_validate(user)
 
-def get_weekly_completion(user_id: int, db: Session) -> int:
-    today = date.today()
+def get_weekly_completion(user_id: int, db: Session, week_offset: int = 0) -> int:
+    """Return the completion percentage for the requested week."""
+
+    today = date.today() - timedelta(weeks=week_offset)
     start_of_week = today - timedelta(days=today.weekday())
     end_of_week = start_of_week + timedelta(days=6)
 
-    completed, total = get_weekly_completion_percentage(db, user_id, start_of_week, end_of_week)
+    completed, total = get_weekly_completion_percentage(
+        db, user_id, start_of_week, end_of_week
+    )
 
     if total == 0:
         return 0
     return int((completed / total) * 100)
 
-def get_most_productive_day(db: Session, user_id: int) -> str:
-    today = date.today()
+def get_most_productive_day(db: Session, user_id: int, week_offset: int = 0) -> str:
+    today = date.today() - timedelta(weeks=week_offset)
     start_of_week = today - timedelta(days=today.weekday())
     end_of_week = start_of_week + timedelta(days=6)
 
@@ -58,12 +69,20 @@ def get_most_productive_day(db: Session, user_id: int) -> str:
     else:
         return ", ".join(day_abbrs)
     
-def get_meals_completion_summary_string(db: Session, user_id: int) -> str:
-    completed, total = get_meals_completion_counts(db, user_id)
+def get_meals_completion_summary_string(
+    db: Session, user_id: int, week_offset: int = 0
+) -> str:
+    today = date.today() - timedelta(weeks=week_offset)
+    start_of_week = today - timedelta(days=today.weekday())
+    end_of_week = start_of_week + timedelta(days=6)
+
+    completed, total = get_meals_completion_counts(
+        db, user_id, start_of_week, end_of_week
+    )
     return f"{completed} / {total}"
 
-def get_weekly_evolution_data(db: Session, user_id: int) -> List[int]:
-    today = date.today()
+def get_weekly_evolution_data(db: Session, user_id: int, week_offset: int = 0) -> List[int]:
+    today = date.today() - timedelta(weeks=week_offset)
     monday = today - timedelta(days=today.weekday())
     sunday = monday + timedelta(days=6)
 
